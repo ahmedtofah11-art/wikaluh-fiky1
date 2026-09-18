@@ -30,7 +30,7 @@
       <div class="top-bar-links">
         <a href="javascript:void(0)" onclick="openTrackOrderModal()"><i class="fa-solid fa-truck-ramp-box"></i> تتبع
           طلبك</a>
-        <a href="javascript:void(0)" onclick="openAuthModal(true)"><i class="fa-solid fa-building-user"></i> بوابة المطابع والشركات (جملة)</a>
+        <a href="javascript:void(0)" onclick="openAuthModal(true)"><i class="fa-solid fa-building-user"></i> بوابة المطابع والشركات</a>
       </div>
     </div>
   </div>
@@ -358,10 +358,10 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.25rem;">
           <button type="button" id="authModeRetailBtn" class="btn btn-outline-gold active"
             onclick="setAuthMode('retail')">
-            <i class="fa-solid fa-user"></i> أفراد وعملاء (قطاعي)
+            <i class="fa-solid fa-user"></i> أفراد وعملاء
           </button>
           <button type="button" id="authModeCalBtn" class="btn btn-outline-gold" onclick="setAuthMode('calligrapher')">
-            <i class="fa-solid fa-building-user"></i> مطابع وشركات (جملة)
+            <i class="fa-solid fa-building-user"></i> مطابع وشركات
           </button>
         </div>
 
@@ -420,7 +420,7 @@
           <div
             style="background: #FFFBEB; border: 1px solid #FDE68A; padding: 0.75rem; border-radius: 6px; margin-bottom: 1.25rem; font-size: 0.82rem; color: #92400E;">
             <i class="fa-solid fa-circle-info ml-1"></i> هذه البوابة مخصصة للمطابع، الشركات، والشركاء المعتمدين من إدارة وكالة
-            الفقي لتفعيل أسعار الجملة.
+            الفقي.
           </div>
 
           <form id="calLoginForm" onsubmit="handleCalligrapherAuthSubmit(event)">
@@ -435,7 +435,7 @@
             </div>
 
             <button type="submit" id="calSubmitBtn" class="btn btn-gold" style="width: 100%;">
-              <i class="fa-solid fa-lock-open"></i> دخول وتفعيل أسعار الجملة
+              <i class="fa-solid fa-lock-open"></i> تسجيل الدخول
             </button>
           </form>
         </div>
