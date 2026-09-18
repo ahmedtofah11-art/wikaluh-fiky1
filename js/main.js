@@ -902,7 +902,7 @@ window.handleCalligrapherAuthSubmit = async function(e) {
       role: "calligrapher"
     });
     window.closeAuthModal();
-    window.showToast("تم تفعيل أسعار الجملة بنجاح");
+    window.showToast("تم تسجيل الدخول بنجاح");
   } catch (err) {
     window.showToast("بيانات دخول المطبعة / الشركة غير صحيحة، يرجى مراجعة إدارة الوكالة");
   } finally {
