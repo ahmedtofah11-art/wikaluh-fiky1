@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>وكالة الفقي للدعاية والإعلان والطباعة</title>
+  <meta name="description"
+    content="وكالة الفقي للطباعة والدعاية والإعلان - تحت إدارة أ/ محمد الفقي وأولاده. دروع تذكارية، شهادات تقدير، لافتات، مجات، وتيشرتات بأعلى جودة.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+
+  <div class="top-bar-gold">
+    <div class="top-bar-container">
+      <div>
+        <i class="fa-solid fa-gem ml-1"></i> وكالة الفقي للطباعة المتخصصة والتنفيذ الفوري
+      </div>
+      <div class="top-bar-links">
+        <a href="javascript:void(0)" onclick="openTrackOrderModal()"><i class="fa-solid fa-truck-ramp-box"></i> تتبع
+          طلبك</a>
+        <a href="javascript:void(0)" onclick="openAuthModal(true)"><i class="fa-solid fa-building-user"></i> بوابة المطابع والشركات (جملة)</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="main-navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="brand-wrapper">
+        <img src="image/logo.jpg" alt="وكالة الفقي للدعاية والإعلان" class="brand-logo-img">
+        <div class="brand-info">
+          <h1>وكالة <span>الفقي</span></h1>
+          <p>تحت إشراف وإدارة: د/ محمد الفقي وأولاده</p>
+        </div>
+      </a>
+
+      <div class="nav-search-wrap">
+        <input type="text" id="searchInput" class="nav-search-input" placeholder="ابحث عن دروع، شهادات، يافطات، مجات..."
+          oninput="handleSearchInput(this.value)">
+        <i class="fa-solid fa-magnifying-glass nav-search-icon"></i>
+      </div>
+
+      <div class="nav-actions">
+        <div id="userStatusBadge" class="user-status-pill status-retail">
+          <i class="fa-solid fa-user"></i> <span id="userStatusText">أفراد وعملاء</span>
+        </div>
+
+        <button id="authBtn" class="btn btn-outline-gold" onclick="handleAuthButtonClick()">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i> <span id="authBtnText">تسجيل الدخول</span>
+        </button>
+
+        <a href="admin.html" id="adminLinkBtn" class="btn btn-navy" style="display: none;">
+          <i class="fa-solid fa-gear"></i> لوحة الإدارة والطلبات
+        </a>
+
+        <button class="btn btn-cart" onclick="toggleCartDrawer()" title="عربة التسوق">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-badge-count" id="headerCartCount" style="display: none;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="main-hero-banner-wrap">
+    <div class="hero-image-banner-box">
+      <img src="image/banner.jpg" alt="وكالة الفقي للدعاية والإعلان - تحت إشراف وإدارة: د/ محمد الفقي وأولاده" class="hero-full-banner-img">
+      <div class="hero-banner-hotspots">
+        <button type="button" class="hero-hotspot-btn btn-track-hotspot" onclick="openTrackOrderModal()" title="متابعة حالة طلب"></button>
+        <a href="#catalogSection" class="hero-hotspot-btn btn-catalog-hotspot" title="تصفح المنتجات والأسعار"></a>
+      </div>
+    </div>
+  </section>
+
+  <nav class="categories-bar-section">
+    <div class="categories-scroll-wrapper" id="categoryChips">
+      <button class="category-tab-btn active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> جميع الأقسام</button>
+      <button class="category-tab-btn" onclick="filterCategory('memorial-shields', this)"><i class="fa-solid fa-trophy"></i> دروع تذكارية</button>
+      <button class="category-tab-btn" onclick="filterCategory('flags', this)"><i class="fa-solid fa-flag"></i> الأعلام</button>
+      <button class="category-tab-btn" onclick="filterCategory('certificates', this)"><i class="fa-solid fa-certificate"></i> شهادات تقدير</button>
+      <button class="category-tab-btn" onclick="filterCategory('cutting', this)"><i class="fa-solid fa-scissors"></i> قص وتقطيع</button>
+      <button class="category-tab-btn" onclick="filterCategory('honor-shields', this)"><i class="fa-solid fa-award"></i> دروع تكريم</button>
+      <button class="category-tab-btn" onclick="filterCategory('uniforms', this)"><i class="fa-solid fa-shirt"></i> اليونيفورم</button>
+      <button class="category-tab-btn" onclick="filterCategory('mugs-gifts', this)"><i class="fa-solid fa-mug-hot"></i> المجات والهدايا</button>
+      <button class="category-tab-btn" onclick="filterCategory('cards-prints', this)"><i class="fa-solid fa-id-card"></i> كروت ومطبوعات</button>
+      <button class="category-tab-btn" onclick="filterCategory('logos-ads', this)"><i class="fa-solid fa-bullhorn"></i> لوجوهات وإعلانات</button>
+      <button class="category-tab-btn" onclick="filterCategory('serials-stamps', this)"><i class="fa-solid fa-stamp"></i> السريلات والأختام</button>
+    </div>
+  </nav>
+
+  <main class="products-catalog-section" id="catalogSection">
+    <div class="section-head">
+      <h2>أصناف ومنتجات الوكالة</h2>
+      <span class="text-sm text-muted">اختر الصنف واطلب التخصيص أو الطباعة مباشرة</span>
+    </div>
+
+    <div class="products-grid-layout" id="productsGrid"></div>
+  </main>
+
+  <div class="modal-overlay" id="customizationModal">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3 id="custModalTitle">طلب وتخصيص المنتج</h3>
+        <button class="modal-close-icon" onclick="closeCustomizationModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body">
+        <div id="custModalSummary" style="margin-bottom: 1.25rem;"></div>
+
+        <form id="customizationForm" onsubmit="handleAddToCartCustom(event)">
+          <div class="form-group-clean">
+            <label class="form-label-clean">النص أو الإهداء المطلوب كتابته على المنتج</label>
+            <textarea id="custTextInput" class="form-input-clean" rows="3"
+              placeholder="اكتب الأسماء أو البيانات المطلوب طباعتها هنا..."></textarea>
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">إرفاق صورة أو تصميم (اختياري)</label>
+            <div class="file-box-clean" onclick="document.getElementById('custFileInput').click()">
+              <i class="fa-solid fa-cloud-arrow-up"
+                style="font-size: 1.75rem; color: var(--primary-gold); margin-bottom: 0.35rem;"></i>
+              <p style="font-size: 0.88rem; font-weight: 700;">اضغط هنا لاختيار صورة التصميم من جهازك</p>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">يدعم جميع صيغ الصور من الموبايل أو
+                الكمبيوتر</span>
+              <input type="file" id="custFileInput" accept="image/*,.pdf" style="display: none;"
+                onchange="handleFileSelect(event)">
+            </div>
+            <div id="filePreviewArea" style="display: none; margin-top: 0.75rem; position: relative;">
+              <img id="filePreviewImg" src=""
+                style="max-width: 120px; max-height: 120px; border-radius: 6px; border: 1px solid var(--border-light);"
+                alt="معاينة">
+              <button type="button" onclick="clearUploadedFile()"
+                style="position: absolute; top: -6px; right: -6px; background: var(--danger); color: #FFF; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer;"><i
+                  class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">الكمية المطلوبة</label>
+            <div class="stepper-clean">
+              <button type="button" class="stepper-btn" onclick="modalChangeQty(-1)">-</button>
+              <span class="stepper-num" id="modalQtyNum">1</span>
+              <button type="button" class="stepper-btn" onclick="modalChangeQty(1)">+</button>
+            </div>
+          </div>
+
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-light); padding-top: 1rem; margin-top: 1rem;">
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">الإجمالي:</span>
+              <div style="font-size: 1.3rem; font-weight: 900; color: var(--primary-gold-dark);" id="modalTotalPrice">0
+                ج.م</div>
+            </div>
+            <button type="submit" class="btn btn-gold">
+              <i class="fa-solid fa-cart-plus"></i> إضافة إلى السلة
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-side-drawer" id="cartDrawer">
+    <div class="cart-side-head">
+      <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--navy-dark);"><i
+          class="fa-solid fa-cart-shopping"></i> عربة التسوق</h3>
+      <button class="modal-close-icon" onclick="toggleCartDrawer()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="cart-side-body">
+      <div id="cartEmptyState" style="display: none; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+        <i class="fa-solid fa-cart-shopping" style="font-size: 2.5rem; margin-bottom: 0.75rem; color: #CBD5E1;"></i>
+        <h4 style="font-weight: 800; color: var(--navy-dark); margin-bottom: 0.25rem;">عربة التسوق فارغة</h4>
+        <p style="font-size: 0.85rem;">اختر منتجاتك لإتمام الطلب بسهولة</p>
+      </div>
+      <div id="cartDrawerItems"></div>
+    </div>
+
+    <div class="cart-side-footer" id="cartFooter">
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.9rem;">
+        <span style="color: var(--text-muted);">عدد الأصناف:</span>
+        <strong id="cartTotalCount">0</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <span style="font-weight: 700; color: var(--navy-dark);">الإجمالي:</span>
+        <strong style="font-size: 1.3rem; color: var(--primary-gold-dark);" id="cartSubtotal">0 ج.م</strong>
+      </div>
+      <button class="btn btn-gold" style="width: 100%;" onclick="openCheckoutModal()">
+        <i class="fa-solid fa-check"></i> تأكيد ومتابعة الدفع
+      </button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL WITH PAYMENT OPTIONS (VODAFONE CASH & INSTAPAY) -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-window" style="max-width: 580px;">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-file-invoice-dollar"></i> استكمال بيانات الطلب والدفع</h3>
+        <button class="modal-close-icon" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body">
+        <form id="checkoutForm" onsubmit="handleFinalCheckout(event)">
+          
+          <!-- Section 1: Customer Details -->
+          <div class="checkout-subheading">
+            <i class="fa-solid fa-user-pen"></i> 1. بيانات المستلم والتوصيل
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">الاسم بالكامل / اسم الجهة أو المطبعة *</label>
+            <input type="text" id="checkoutName" class="form-input-clean" required placeholder="أدخل اسمك الكريم">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+            <div>
+              <label class="form-label-clean">رقم الهاتف الأساسي (واتساب) *</label>
+              <input type="tel" id="checkoutPhone1" class="form-input-clean" required placeholder="01xxxxxxxxx">
+            </div>
+            <div>
+              <label class="form-label-clean">رقم هاتف إضافي</label>
+              <input type="tel" id="checkoutPhone2" class="form-input-clean" placeholder="اختياري">
+            </div>
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">العنوان بالتفصيل *</label>
+            <textarea id="checkoutAddress" class="form-input-clean" rows="2" required
+              placeholder="المدينة، المنطقة، الشارع"></textarea>
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">ملاحظات إضافية على الطلب</label>
+            <input type="text" id="checkoutNotes" class="form-input-clean"
+              placeholder="أي تفاصيل تخص موعد الاستلام أو الطباعة">
+          </div>
+
+          <!-- Section 2: Payment Method Selection -->
+          <div class="checkout-subheading" style="margin-top: 1.5rem;">
+            <i class="fa-solid fa-wallet"></i> 2. طريقة الدفع الإلكتروني
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+            يرجى اختيار طريقة الدفع المناسبة وتحويل إجمالي المبلغ:
+          </p>
+
+          <div class="payment-methods-grid">
+            <div class="payment-method-card active" id="payMethodVodaCard" onclick="selectPaymentMethod('vodafone_cash')">
+              <input type="radio" name="payMethodRadio" id="payRadioVoda" value="vodafone_cash" checked style="display: none;">
+              <div class="pay-card-header">
+                <i class="fa-solid fa-mobile-screen-button pay-card-icon voda"></i>
+                <div>
+                  <div class="pay-card-title">فودافون كاش</div>
+                  <div class="pay-card-desc">تحويل كاش للمحفظة</div>
+                </div>
+              </div>
+              <div class="pay-check-circle"><i class="fa-solid fa-check"></i></div>
+            </div>
+
+            <div class="payment-method-card" id="payMethodInstaCard" onclick="selectPaymentMethod('instapay')">
+              <input type="radio" name="payMethodRadio" id="payRadioInsta" value="instapay" style="display: none;">
+              <div class="pay-card-header">
+                <i class="fa-solid fa-building-columns pay-card-icon insta"></i>
+                <div>
+                  <div class="pay-card-title">انستاباي InstaPay</div>
+                  <div class="pay-card-desc">تحويل بنكي / IPA فوري</div>
+                </div>
+              </div>
+              <div class="pay-check-circle"><i class="fa-solid fa-check"></i></div>
+            </div>
+          </div>
+
+          <!-- Dynamic Payment Details Box -->
+          <div id="vodafoneCashBox" class="payment-instruction-box">
+            <div class="pay-box-title">
+              <i class="fa-solid fa-circle-info" style="color: #EF4444;"></i> بيانات تحويل فودافون كاش
+            </div>
+            <div class="pay-num-display">
+              <span class="pay-num-val" id="vodaCashNumberText">01021800199</span>
+              <button type="button" class="btn-copy-num" onclick="copyPaymentNumber('01021800199', this)">
+                <i class="fa-regular fa-copy"></i> نسخ الرقم
+              </button>
+            </div>
+            <div class="pay-instruction-note">
+              حول إجمالي المبلغ (<strong id="checkoutTotalVoda">0 ج.م</strong>) لرقم الكاش أعلاه ثم ارفع سكرين شوت الإيصال بالأسفل.
+            </div>
+          </div>
+
+          <div id="instapayBox" class="payment-instruction-box" style="display: none;">
+            <div class="pay-box-title">
+              <i class="fa-solid fa-circle-info" style="color: #8B5CF6;"></i> بيانات تحويل انستاباي (InstaPay)
+            </div>
+            <div class="pay-num-display">
+              <span class="pay-num-val" id="instaHandleText">elfeqy@instapay</span>
+              <button type="button" class="btn-copy-num" onclick="copyPaymentNumber('elfeqy@instapay', this)">
+                <i class="fa-regular fa-copy"></i> نسخ المعرف
+              </button>
+            </div>
+            <div style="font-size: 0.8rem; color: #475569; margin-top: 0.35rem;">
+              أو رقم الهاتف للتحويل: <strong>01021800199</strong>
+            </div>
+            <div class="pay-instruction-note">
+              حول إجمالي المبلغ (<strong id="checkoutTotalInsta">0 ج.م</strong>) عبر انستاباي ثم ارفع سكرين شوت الإشعار بالأسفل.
+            </div>
+          </div>
+
+          <!-- Section 3: Receipt Upload -->
+          <div class="form-group-clean" style="margin-top: 1rem;">
+            <label class="form-label-clean" style="color: var(--navy-dark); font-weight: 800;">
+              <i class="fa-solid fa-receipt" style="color: var(--primary-gold);"></i> إرفاق إيصال / سكرين شوت التحويل *
+            </label>
+            <div class="file-box-clean" onclick="document.getElementById('paymentReceiptInput').click()">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.6rem; color: var(--primary-gold); margin-bottom: 0.3rem;"></i>
+              <p style="font-size: 0.88rem; font-weight: 700;">اضغط هنا لرفع صورة إشعار أو سكرين شوت التحويل</p>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">ضروري لمراجعة وتأكيد طلبكم فوراً من الورشة</span>
+              <input type="file" id="paymentReceiptInput" accept="image/*" style="display: none;" onchange="handleReceiptFileSelect(event)">
+            </div>
+            <div id="receiptPreviewArea" style="display: none; margin-top: 0.75rem; position: relative;">
+              <img id="receiptPreviewImg" src="" style="max-width: 140px; max-height: 140px; border-radius: 8px; border: 2px solid var(--primary-gold);" alt="معاينة الإيصال">
+              <button type="button" onclick="clearReceiptFile()" style="position: absolute; top: -6px; right: -6px; background: var(--danger); color: #FFF; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+
+          <div style="background: #F8FAFC; border: 1px solid var(--border-light); padding: 0.85rem; border-radius: 6px; margin-bottom: 1.25rem; margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 0.25rem;">
+              <span>إجمالي الحساب المطلوب تحويله:</span>
+              <strong style="color: var(--primary-gold-dark); font-size: 1.2rem;" id="checkoutFinalTotal">0 ج.م</strong>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">فور إرسال الطلب سيصلك رقم تتبع مباشر وسيتم تجهيز طلبكم على الفور.</p>
+          </div>
+
+          <button type="submit" id="checkoutSubmitBtn" class="btn btn-gold" style="width: 100%; font-size: 1rem; padding: 0.75rem;">
+            <i class="fa-solid fa-check-circle"></i> تأكيد وإرسال الطلب للوكالة
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-window" style="max-width: 480px;">
+      <div class="modal-head">
+        <h3>تسجيل الدخول</h3>
+        <button class="modal-close-icon" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.25rem;">
+          <button type="button" id="authModeRetailBtn" class="btn btn-outline-gold active"
+            onclick="setAuthMode('retail')">
+            <i class="fa-solid fa-user"></i> أفراد وعملاء (قطاعي)
+          </button>
+          <button type="button" id="authModeCalBtn" class="btn btn-outline-gold" onclick="setAuthMode('calligrapher')">
+            <i class="fa-solid fa-building-user"></i> مطابع وشركات (جملة)
+          </button>
+        </div>
+
+        <div id="retailAuthSection">
+          <div style="display: flex; border-bottom: 2px solid var(--border-light); margin-bottom: 1.25rem;">
+            <button type="button" class="btn btn-outline-gold"
+              style="flex: 1; border-radius: 0; border: none; border-bottom: 2px solid var(--primary-gold);"
+              id="tabRetailLogin" onclick="switchRetailSubTab('login')">تسجيل دخول العملاء</button>
+            <button type="button" class="btn btn-outline-gold"
+              style="flex: 1; border-radius: 0; border: none; color: var(--text-muted);" id="tabRetailRegister"
+              onclick="switchRetailSubTab('register')">إنشاء حساب جديد</button>
+          </div>
+
+          <button type="button" class="btn btn-navy" style="width: 100%; margin-bottom: 1rem;"
+            onclick="handleGoogleAuth()">
+            <i class="fa-brands fa-google" style="color: #FBBF24;"></i> الدخول السريع بحساب Google
+          </button>
+
+          <div style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">أو بالبريد
+            وكلمة المرور</div>
+
+          <form id="retailAuthForm" onsubmit="handleRetailAuthSubmit(event)">
+            <div class="form-group-clean" id="retailNameGroup" style="display: none;">
+              <label class="form-label-clean">الاسم بالكامل</label>
+              <input type="text" id="retailDisplayName" class="form-input-clean" placeholder="اسمك الكريم">
+            </div>
+
+            <div class="form-group-clean">
+              <label class="form-label-clean">البريد الإلكتروني</label>
+              <input type="email" id="retailEmail" class="form-input-clean" required placeholder="name@example.com">
+            </div>
+
+            <div class="form-group-clean">
+              <label class="form-label-clean">كلمة المرور</label>
+              <input type="password" id="retailPassword" class="form-input-clean" required placeholder="••••••••">
+            </div>
+
+            <div class="form-group-clean" id="retailConfirmPassGroup" style="display: none;">
+              <label class="form-label-clean">تأكيد كلمة المرور</label>
+              <input type="password" id="retailConfirmPassword" class="form-input-clean" placeholder="••••••••">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.82rem;"
+              id="retailForgotRow">
+              <a href="javascript:void(0)" style="color: var(--primary-gold-dark);" onclick="openForgotModal()">نسيت
+                كلمة المرور؟</a>
+            </div>
+
+            <button type="submit" id="retailSubmitBtn" class="btn btn-gold" style="width: 100%;">
+              تسجيل الدخول
+            </button>
+          </form>
+        </div>
+
+        <div id="calligrapherAuthSection" style="display: none;">
+          <div
+            style="background: #FFFBEB; border: 1px solid #FDE68A; padding: 0.75rem; border-radius: 6px; margin-bottom: 1.25rem; font-size: 0.82rem; color: #92400E;">
+            <i class="fa-solid fa-circle-info ml-1"></i> هذه البوابة مخصصة للمطابع، الشركات، والشركاء المعتمدين من إدارة وكالة
+            الفقي لتفعيل أسعار الجملة.
+          </div>
+
+          <form id="calLoginForm" onsubmit="handleCalligrapherAuthSubmit(event)">
+            <div class="form-group-clean">
+              <label class="form-label-clean">البريد الإلكتروني المعتمد للمطبعة / الشركة *</label>
+              <input type="email" id="calLoginEmail" class="form-input-clean" required placeholder="company@fiky.com">
+            </div>
+
+            <div class="form-group-clean">
+              <label class="form-label-clean">كلمة المرور الخاصة بحسابكم *</label>
+              <input type="password" id="calLoginPassword" class="form-input-clean" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" id="calSubmitBtn" class="btn btn-gold" style="width: 100%;">
+              <i class="fa-solid fa-lock-open"></i> دخول وتفعيل أسعار الجملة
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="forgotModal">
+    <div class="modal-window" style="max-width: 420px;">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-key"></i> استعادة كلمة المرور</h3>
+        <button class="modal-close-icon" onclick="closeForgotModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body">
+        <p style="font-size: 0.85rem; color: #64748B; margin-bottom: 1rem;">أدخل بريدك الإلكتروني المسجل وسنرسل لك رابط
+          استعادة وتعيين كلمة المرور فوراً.</p>
+        <form onsubmit="handleForgotSubmit(event)">
+          <div class="form-group-clean">
+            <label class="form-label-clean">البريد الإلكتروني المسجل</label>
+            <input type="email" id="forgotEmailInput" class="form-input-clean" required placeholder="name@example.com">
+          </div>
+          <button type="submit" class="btn btn-gold" style="width: 100%;">
+            <i class="fa-solid fa-paper-plane"></i> إرسال رمز الاستعادة
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="trackModal">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-magnifying-glass"></i> متابعة حالة الطلب</h3>
+        <button class="modal-close-icon" onclick="closeTrackModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body">
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+          <input type="text" id="trackOrderInput" class="form-input-clean" placeholder="أدخل رقم الطلب مثل: FK-123456">
+          <button class="btn btn-gold" onclick="searchTrackOrder()">بحث</button>
+        </div>
+        <div id="trackResultArea"></div>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://wa.me/201021800199" target="_blank" class="floating-whatsapp-btn" title="تواصل واتساب مع الوكالة">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <div class="toast-box" id="toastContainer"></div>
+
+  <footer class="clean-footer">
+    <div class="footer-inner-clean">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <img src="image/logo.jpg" alt="شعار الفقي" style="width: 56px; height: 56px; object-fit: contain; padding: 2px; border-radius: 8px; border: 2px solid var(--primary-gold); background: #000;">
+        <div>
+          <div class="footer-brand-title">وكالة <span>الفقي</span> للدعاية والإعلان</div>
+          <div class="footer-admin-name">تحت إشراف وإدارة: د/ محمد الفقي وأولاده</div>
+        </div>
+      </div>
+
+      <div class="footer-social-links">
+        <a href="https://wa.me/201021800199" target="_blank" title="واتساب"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" title="فيسبوك"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="tel:01021800199" title="اتصال هاتفي"><i class="fa-solid fa-phone"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة التحكم والإدارة - وكالة الفقي للطباعة</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+  <!-- ADMIN / STAFF LOGIN GATE -->
+  <div class="modal-overlay active" id="adminGateModal" style="display: flex; z-index: 5000; background: rgba(15, 23, 42, 0.95);">
+    <div class="modal-window" style="max-width: 440px; border: 2px solid var(--primary-gold);">
+      <div class="modal-head" style="background: #0F172A; color: #FFF; border-bottom: 2px solid var(--primary-gold);">
+        <h3 style="color: #FDE68A; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-lock"></i> تسجيل دخول لوحة التحكم والطلبات</h3>
+      </div>
+      <div class="modal-content-body">
+        <div style="text-align: center; margin-bottom: 1.25rem;">
+          <img src="image/logo.jpg" alt="شعار الفقي" style="width: 76px; height: 76px; object-fit: contain; border-radius: 50%; border: 2px solid var(--primary-gold); background: #000; margin: 0 auto 0.5rem; display: block; padding: 4px; box-shadow: 0 0 15px rgba(197, 155, 39, 0.35);">
+          <h4 style="font-weight: 900; color: #0F172A; font-size: 1.15rem;">وكالة الفقي للدعاية والإعلان</h4>
+          <p style="font-size: 0.82rem; color: #64748B;">تحت إشراف وإدارة: د/ محمد الفقي وأولاده</p>
+        </div>
+
+        <form id="adminLoginForm" onsubmit="handleAdminGateLogin(event)">
+          <div class="form-group-clean">
+            <label class="form-label-clean">البريد الإلكتروني (الإدارة أو مسؤول الطلبات)</label>
+            <input type="email" id="adminGateEmail" class="form-input-clean" required placeholder="admin@fiky.com أو orders@fiky.com">
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">كلمة المرور</label>
+            <input type="password" id="adminGatePassword" class="form-input-clean" required placeholder="••••••••">
+          </div>
+
+          <button type="submit" id="adminGateSubmitBtn" class="btn btn-gold" style="width: 100%; margin-top: 0.5rem;">
+            <i class="fa-solid fa-key"></i> الدخول إلى النظام
+          </button>
+        </form>
+
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 0.75rem; margin-top: 1rem; font-size: 0.78rem; color: #64748B; line-height: 1.5;">
+          <div><strong style="color: #0F172A;">حساب الإدارة الكاملة:</strong> admin@gmail.com (كلمة السر: 12345678 أو superadmin10)</div>
+          <div style="margin-top: 0.3rem;"><strong style="color: #0F172A;">حساب مسؤول الطلبات فقط:</strong> orders@fiky.com (كلمة السر: 12345678 أو orders1234)</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 1rem;">
+          <a href="index.html" style="font-size: 0.85rem; color: #64748B; text-decoration: none;"><i class="fa-solid fa-arrow-right"></i> العودة إلى صفحة المتجر</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminMainWrapper" style="display: none;">
+    <div class="mobile-admin-header">
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <button class="mobile-menu-toggle" onclick="toggleMobileSidebar()"><i class="fa-solid fa-bars"></i></button>
+        <div style="font-weight: 800; font-size: 1rem; color: #FDE68A;">وكالة الفقي للإدارة</div>
+      </div>
+      <a href="index.html" class="btn btn-sm btn-gold"><i class="fa-solid fa-store"></i> المتجر</a>
+    </div>
+
+    <div class="admin-layout">
+      <aside class="admin-sidebar" id="adminSidebar">
+        <div class="admin-sidebar-brand">
+          <img src="image/logo.jpg" alt="شعار الفقي" style="width: 48px; height: 48px; object-fit: contain; border-radius: 8px; border: 1.5px solid var(--primary-gold); background: #000; padding: 2px;">
+          <div>
+            <h2 style="font-size: 1.05rem; font-weight: 900; color: #FDE68A;">وكالة الفقي</h2>
+            <p style="font-size: 0.75rem; color: #94A3B8;" id="sidebarUserRoleText">لوحة التحكم والمتابعة</p>
+          </div>
+        </div>
+
+        <nav class="admin-nav">
+          <button class="admin-nav-item active" onclick="switchAdminTab('orders', this)" id="navTabOrders">
+            <i class="fa-solid fa-dolly"></i> إدارة ومتابعة الطلبات
+          </button>
+          <button class="admin-nav-item admin-only-item" onclick="switchAdminTab('products', this)" id="navTabProducts">
+            <i class="fa-solid fa-boxes-stacked"></i> الأصناف والأسعار
+          </button>
+          <button class="admin-nav-item admin-only-item" onclick="switchAdminTab('categories', this)" id="navTabCategories">
+            <i class="fa-solid fa-folder-tree"></i> إدارة أقسام المطبعة
+          </button>
+          <button class="admin-nav-item admin-only-item" onclick="switchAdminTab('calligraphers', this)" id="navTabWholesale">
+            <i class="fa-solid fa-building-user"></i> حسابات المطابع والشركات
+          </button>
+          <a href="index.html" class="admin-nav-item" style="margin-top: auto;">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> العودة للمتجر
+          </a>
+        </nav>
+      </aside>
+
+      <main class="admin-content">
+        <div class="admin-topbar">
+          <div>
+            <h1 style="font-size: 1.45rem; font-weight: 900; color: #0F172A;" id="adminTopbarTitle">مركز متابعة طلبات الوكالة</h1>
+            <p style="font-size: 0.85rem; color: #64748B;" id="adminTopbarSubtitle">متابعة فورية للطلبات، إيصالات الدفع، والتنفيذ الفوري</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span id="adminRoleBadge" class="user-status-pill status-calligrapher" style="font-size: 0.85rem;">
+              <i class="fa-solid fa-user-shield"></i> <span id="adminRoleBadgeText">مدير الوكالة</span>
+            </span>
+            <button class="btn btn-sm btn-navy" onclick="handleAdminLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> خروج</button>
+          </div>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="admin-stats-grid">
+          <div class="stat-card" id="statCardRevenue">
+            <div class="stat-icon gold"><i class="fa-solid fa-sack-dollar"></i></div>
+            <div class="stat-info">
+              <div class="stat-val" style="color: #A17C17;" id="statTotalRevenue">0 ج.م</div>
+              <div class="stat-lbl">إجمالي المبيعات</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon blue"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="stat-info">
+              <div class="stat-val" style="color: #0284C7;" id="statPendingOrders">0 طلب</div>
+              <div class="stat-lbl">طلبات جديدة قيد المراجعة</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon green"><i class="fa-solid fa-cubes-stacked"></i></div>
+            <div class="stat-info">
+              <div class="stat-val" id="statTotalPieces">0 قطعة</div>
+              <div class="stat-lbl">إجمالي القطع المطلوبة</div>
+            </div>
+          </div>
+
+          <div class="stat-card" id="statCardWholesaleRatio">
+            <div class="stat-icon purple"><i class="fa-solid fa-handshake"></i></div>
+            <div class="stat-info">
+              <div class="stat-val" style="color: #7C3AED;" id="statWholesaleRatio">0 جملة / 0 قطاعي</div>
+              <div class="stat-lbl">مبيعات الشركات والقطاعي</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORDERS TAB CONTENT -->
+        <div id="tabContentOrders">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 900; color: #0F172A;"><i class="fa-solid fa-list-check" style="color: #C59B27; margin-left: 0.35rem;"></i> سجل الطلبات وإيصالات الدفع</h3>
+                <p style="font-size: 0.8rem; color: #64748B;">متابعة حالة كل طلب، معاينة التصميم، مراجعة إيصال فودافون كاش / انستاباي، وتحديد موعد التسليم</p>
+              </div>
+              <div class="filter-btn-group">
+                <button class="btn btn-sm btn-navy active" onclick="filterOrdersStatus('all', this)">الكل</button>
+                <button class="btn btn-sm btn-navy" onclick="filterOrdersStatus('pending', this)">قيد المراجعة</button>
+                <button class="btn btn-sm btn-navy" onclick="filterOrdersStatus('processing', this)">جاري التنفيذ</button>
+                <button class="btn btn-sm btn-navy" onclick="filterOrdersStatus('ready', this)">جاهز للتسليم</button>
+                <button class="btn btn-sm btn-navy" onclick="filterOrdersStatus('completed', this)">مكتمل</button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>رقم الطلب</th>
+                    <th>العميل وبيانات التواصل</th>
+                    <th>المنتجات والتخصيص</th>
+                    <th>الإجمالي وطريقة الدفع</th>
+                    <th>الحالة وموعد الاستلام</th>
+                    <th>الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCTS TAB (ADMIN ONLY) -->
+        <div id="tabContentProducts" style="display: none;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 900; color: #0F172A;"><i class="fa-solid fa-boxes-stacked" style="color: #C59B27; margin-left: 0.35rem;"></i> الأصناف والتسعير المزدوج</h3>
+                <p style="font-size: 0.8rem; color: #64748B;">تحديد سعر القطاعي وسعر المطابع والشركات (جملة) لكل صنف</p>
+              </div>
+              <button class="btn btn-gold btn-sm" onclick="openAddProductModal()">
+                <i class="fa-solid fa-plus"></i> إضافة صنف جديد
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>الصورة</th>
+                    <th>اسم الصنف والقسم</th>
+                    <th>سعر القطاعي (أفراد)</th>
+                    <th>سعر المطابع والشركات (جملة)</th>
+                    <th>المخزون</th>
+                    <th>الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody id="adminProductsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- CATEGORIES TAB (ADMIN ONLY) -->
+        <div id="tabContentCategories" style="display: none;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 900; color: #0F172A;"><i class="fa-solid fa-folder-tree" style="color: #C59B27; margin-left: 0.35rem;"></i> إدارة أقسام المطبعة</h3>
+                <p style="font-size: 0.8rem; color: #64748B;">إضافة وتعديل أقسام المنتجات المعروضة في المتجر</p>
+              </div>
+              <button class="btn btn-gold btn-sm" onclick="openAddCategoryModal()">
+                <i class="fa-solid fa-plus"></i> إضافة قسم جديد
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>الأيقونة</th>
+                    <th>اسم القسم</th>
+                    <th>المعرف (ID)</th>
+                    <th>الإجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="adminCategoriesTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- WHOLESALE ACCOUNTS TAB (ADMIN ONLY) -->
+        <div id="tabContentCalligraphers" style="display: none;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 900; color: #0F172A;"><i class="fa-solid fa-building-user" style="color: #C59B27; margin-left: 0.35rem;"></i> حسابات المطابع والشركات المعتمدة</h3>
+                <p style="font-size: 0.8rem; color: #64748B;">إنشاء حساب مخصص لكل مطبعة أو شركة ببريد وكلمة مرور خاصة لتمكينهم من رؤية أسعار الجملة</p>
+              </div>
+              <button class="btn btn-gold btn-sm" onclick="openAddCalligrapherModal()">
+                <i class="fa-solid fa-user-plus"></i> إضافة حساب مطبعة / شركة جديد
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>اسم المطبعة / الشركة</th>
+                    <th>البريد الإلكتروني للدخول</th>
+                    <th>كلمة المرور</th>
+                    <th>رقم الهاتف</th>
+                    <th>الإجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="adminCalligraphersTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- MANAGE ORDER MODAL -->
+  <div class="modal-overlay" id="manageOrderModal">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-sliders"></i> تحديث حالة الطلب وموعد الاستلام</h3>
+        <button class="modal-close-icon" onclick="closeManageOrderModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body">
+        <form id="manageOrderForm" onsubmit="saveOrderStatusSubmit(event)">
+          <input type="hidden" id="manageOrderId">
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">حالة الطلب والتنفيذ</label>
+            <select id="manageOrderStatus" class="form-input-clean">
+              <option value="pending">قيد المراجعة والتأكيد</option>
+              <option value="processing">تم القبول - جاري الطباعة والتنفيذ</option>
+              <option value="ready">جاهز للاستلام / التسليم</option>
+              <option value="completed">تم التسليم بنجاح</option>
+              <option value="cancelled">إلغاء الطلب</option>
+            </select>
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">حالة الدفع واستلام المبلغ</label>
+            <select id="managePaymentStatus" class="form-input-clean">
+              <option value="تم استلام المبلغ وتأكيد الدفع">تم استلام المبلغ وتأكيد الدفع</option>
+              <option value="تم إرفاق الإيصال - قيد المراجعة">تم إرفاق الإيصال - قيد المراجعة</option>
+              <option value="بانتظار التحويل">بانتظار التحويل</option>
+              <option value="الدفع عند الاستلام">الدفع عند الاستلام</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+            <div>
+              <label class="form-label-clean">المدة التقديرية</label>
+              <input type="text" id="manageOrderDuration" class="form-input-clean" placeholder="مثال: يخلص خلال 3 أيام">
+            </div>
+            <div>
+              <label class="form-label-clean">تاريخ الاستلام المحدد</label>
+              <input type="date" id="manageOrderDate" class="form-input-clean">
+            </div>
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">ملاحظات الورشة والتنفيذ</label>
+            <textarea id="manageOrderAdminNotes" class="form-input-clean" rows="2" placeholder="ملاحظات لفريق الطباعة أو التسليم"></textarea>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button type="submit" class="btn btn-gold" style="flex: 2; min-width: 140px;">
+              <i class="fa-solid fa-floppy-disk"></i> حفظ التحديث
+            </button>
+            <button type="button" class="btn btn-navy" style="flex: 1; min-width: 120px;" onclick="printCurrentOrderReceipt()">
+              <i class="fa-solid fa-print"></i> طباعة إيصال
+            </button>
+            <button type="button" class="btn" style="background: #EF4444; color: #FFF; padding: 0.6rem 1rem;" onclick="deleteOrderAdmin()" title="حذف الطلب">
+              <i class="fa-solid fa-trash-can"></i> حذف الطلب
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT FORM MODAL -->
+  <div class="modal-overlay" id="productFormModal">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-box"></i> إضافة / تعديل صنف</h3>
+        <button class="modal-close-icon" onclick="closeProductFormModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body">
+        <form id="productAdminForm" onsubmit="saveProductSubmit(event)">
+          <input type="hidden" id="prodFormId">
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">اسم الصنف *</label>
+            <input type="text" id="prodFormName" class="form-input-clean" required placeholder="مثال: شهادة تقدير كوشيه مذهبة">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+            <div>
+              <label class="form-label-clean">القسم *</label>
+              <select id="prodFormCategory" class="form-input-clean" required></select>
+            </div>
+            <div>
+              <label class="form-label-clean">وحدة القياس</label>
+              <input type="text" id="prodFormUnit" class="form-input-clean" placeholder="قطعة / متر مربع / علبة 1000">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+            <div>
+              <label class="form-label-clean">سعر القطاعي (أفراد) ج.م *</label>
+              <input type="number" id="prodFormRetailPrice" class="form-input-clean" required min="1" placeholder="45">
+            </div>
+            <div>
+              <label class="form-label-clean">سعر المطابع والشركات (جملة) ج.م *</label>
+              <input type="number" id="prodFormWholesalePrice" class="form-input-clean" required min="1" placeholder="28">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+            <div>
+              <label class="form-label-clean">المخزون المتاح *</label>
+              <input type="number" id="prodFormStock" class="form-input-clean" required min="0" placeholder="100">
+            </div>
+            <div>
+              <label class="form-label-clean">شارة ترويجية</label>
+              <input type="text" id="prodFormBadge" class="form-input-clean" placeholder="الأكثر طلباً / مميز">
+            </div>
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">صورة الصنف</label>
+            <input type="url" id="prodFormImageUrl" class="form-input-clean" style="margin-bottom: 0.5rem;" placeholder="رابط الصورة: https://...">
+            <div class="file-box-clean" onclick="document.getElementById('prodFormFileInput').click()">
+              <p style="font-size: 0.8rem; font-weight: 700;">أو اضغط لرفع صورة من جهازك</p>
+              <input type="file" id="prodFormFileInput" accept="image/*" style="display: none;" onchange="handleAdminProductImage(event)">
+            </div>
+            <div id="adminProdImgPreviewWrap" style="display: none; margin-top: 0.5rem;">
+              <img id="adminProdImgPreview" src="" style="width: 70px; height: 70px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-light);" alt="معاينة">
+            </div>
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">وصف ومواصفات الصنف</label>
+            <textarea id="prodFormDesc" class="form-input-clean" rows="2" placeholder="مواصفات الخامة، المقاسات، والطباعة"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-gold" style="width: 100%;">
+            <i class="fa-solid fa-floppy-disk"></i> حفظ الصنف ونشره
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORY FORM MODAL -->
+  <div class="modal-overlay" id="categoryFormModal">
+    <div class="modal-window" style="max-width: 440px;">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-folder-plus"></i> إضافة قسم جديد</h3>
+        <button class="modal-close-icon" onclick="closeCategoryFormModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body">
+        <form id="categoryAdminForm" onsubmit="saveCategorySubmit(event)">
+          <div class="form-group-clean">
+            <label class="form-label-clean">اسم القسم *</label>
+            <input type="text" id="catFormName" class="form-input-clean" required placeholder="مثال: مطبوعات جلدية / أكريليك">
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">أيقونة القسم (FontAwesome)</label>
+            <select id="catFormIcon" class="form-input-clean">
+              <option value="fa-trophy">fa-trophy (كؤوس ودروع تذكارية)</option>
+              <option value="fa-award">fa-award (دروع تكريم وأوسمة)</option>
+              <option value="fa-flag">fa-flag (الأعلام)</option>
+              <option value="fa-certificate">fa-certificate (شهادات تقدير)</option>
+              <option value="fa-scissors">fa-scissors (قص وتقطيع)</option>
+              <option value="fa-shirt">fa-shirt (اليونيفورم والملابس)</option>
+              <option value="fa-mug-hot">fa-mug-hot (المجات والهدايا)</option>
+              <option value="fa-id-card">fa-id-card (كروت ومطبوعات)</option>
+              <option value="fa-bullhorn">fa-bullhorn (لوجوهات وإعلانات)</option>
+              <option value="fa-stamp">fa-stamp (السريلات والأختام)</option>
+              <option value="fa-box">fa-box (صندوق عام)</option>
+              <option value="fa-pen-nib">fa-pen-nib (أقلام وكتابة)</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-gold" style="width: 100%;">
+            <i class="fa-solid fa-plus"></i> حفظ وإضافة القسم
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHOLESALE ACCOUNT FORM MODAL -->
+  <div class="modal-overlay" id="calligrapherFormModal">
+    <div class="modal-window" style="max-width: 460px;">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-user-plus"></i> إنشاء حساب مطبعة / شركة جديد</h3>
+        <button class="modal-close-icon" onclick="closeCalligrapherFormModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body">
+        <form id="calligrapherAdminForm" onsubmit="saveCalligrapherSubmit(event)">
+          <div class="form-group-clean">
+            <label class="form-label-clean">اسم المطبعة أو الشركة *</label>
+            <input type="text" id="calFormName" class="form-input-clean" required placeholder="مثال: مطبعة النور للدعاية">
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">البريد الإلكتروني المخصص للدخول *</label>
+            <input type="email" id="calFormEmail" class="form-input-clean" required placeholder="company@fiky.com">
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">كلمة المرور الخاصة بالحساب *</label>
+            <input type="text" id="calFormPassword" class="form-input-clean" required placeholder="مثال: 12345678">
+          </div>
+
+          <div class="form-group-clean">
+            <label class="form-label-clean">رقم الهاتف / الواتساب</label>
+            <input type="tel" id="calFormPhone" class="form-input-clean" placeholder="01xxxxxxxxx">
+          </div>
+
+          <button type="submit" id="calFormSubmitBtn" class="btn btn-gold" style="width: 100%;">
+            <i class="fa-solid fa-check"></i> إنشاء الحساب وتفعيل أسعار الجملة
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER DESIGN PREVIEW MODAL -->
+  <div class="modal-overlay" id="designPreviewModal">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-image"></i> معاينة تصميم العميل</h3>
+        <button class="modal-close-icon" onclick="document.getElementById('designPreviewModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body" style="text-align: center;">
+        <img id="modalFullDesignImg" src="" style="max-width: 100%; max-height: 65vh; border-radius: 8px; border: 1px solid var(--border-light);" alt="تصميم العميل">
+        <div style="margin-top: 1rem;">
+          <a id="btnDownloadDesign" href="" download="design.png" class="btn btn-gold">
+            <i class="fa-solid fa-download"></i> تحميل التصميم
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT RECEIPT PREVIEW MODAL (NEW) -->
+  <div class="modal-overlay" id="receiptPreviewModal">
+    <div class="modal-window" style="max-width: 520px;">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-receipt"></i> معاينة إيصال / سكرين شوت التحويل</h3>
+        <button class="modal-close-icon" onclick="document.getElementById('receiptPreviewModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-content-body" style="text-align: center;">
+        <div id="receiptModalInfo" style="margin-bottom: 1rem; text-align: right; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 0.75rem; border-radius: 6px;"></div>
+        <img id="modalFullReceiptImg" src="" style="max-width: 100%; max-height: 60vh; border-radius: 8px; border: 2px solid var(--primary-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.1);" alt="إيصال التحويل">
+        <div style="margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: center;">
+          <a id="btnDownloadReceipt" href="" download="receipt.png" class="btn btn-gold">
+            <i class="fa-solid fa-download"></i> تحميل الإيصال
+          </a>
+          <button type="button" class="btn btn-navy" onclick="document.getElementById('receiptPreviewModal').classList.remove('active')">
+            إغلاق
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="printableInvoice" style="display: none; padding: 2rem; font-family: 'Cairo', sans-serif; direction: rtl; color: #000; background: #FFF;"></div>
+
+  <div class="toast-box" id="toastContainer"></div>
+
+  <script src="js/admin-main.js"></script>
+</body>
+</html>
