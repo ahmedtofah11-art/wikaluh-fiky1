@@ -517,7 +517,7 @@ window.printCurrentOrderReceipt = function() {
         <div>
           <h2 style="margin: 0; color: #0F172A; font-size: 22px;">وكالة الفقي للدعاية والإعلان</h2>
           <p style="margin: 3px 0 0; font-size: 12px; color: #666;">تحت إشراف وإدارة: د/ محمد الفقي وأولاده</p>
-          <p style="margin: 3px 0 0; font-size: 12px; color: #666;">هاتف وواتساب: 01021482811</p>
+          <p style="margin: 3px 0 0; font-size: 12px; color: #666;">هاتف وواتساب: 01021800199</p>
         </div>
         <div style="text-align: left;">
           <h3 style="margin: 0; color: #A17C17;">إيصال تسليم طلب</h3>
@@ -533,7 +533,7 @@ window.printCurrentOrderReceipt = function() {
           <div><strong>العنوان:</strong> ${o.address || "استلام من المقر"}</div>
         </div>
         <div style="text-align: left;">
-          <div><strong>نوع الطلب:</strong> ${isWholesale ? "سعر مطابع وشركات (جملة)" : "سعر قطاعي (أفراد)"}</div>
+          <div><strong>نوع الطلب:</strong> ${isWholesale ? "مطابع وشركات" : "أفراد وعملاء"}</div>
           <div><strong>طريقة الدفع:</strong> ${o.paymentMethodTitle || o.paymentMethod || "كاش"}</div>
           <div><strong>موعد الاستلام:</strong> ${o.estimatedDate || o.estimatedDuration || "فوري"}</div>
         </div>
