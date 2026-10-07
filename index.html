@@ -31,7 +31,8 @@
       <div class="top-bar-links">
         <a href="javascript:void(0)" onclick="openTrackOrderModal()"><i class="fa-solid fa-truck-ramp-box"></i> تتبع
           طلبك</a>
-        <a href="javascript:void(0)" onclick="openAuthModal(true)"><i class="fa-solid fa-building-user"></i> بوابة المطابع والشركات</a>
+        <a href="javascript:void(0)" onclick="openAuthModal(true)"><i class="fa-solid fa-building-user"></i> بوابة
+          المطابع والشركات</a>
       </div>
     </div>
   </div>
@@ -75,9 +76,11 @@
 
   <section class="main-hero-banner-wrap">
     <div class="hero-image-banner-box">
-      <img src="image/banner.jpg" alt="وكالة الفقي للدعاية والإعلان - تحت إشراف وإدارة: د/ محمد الفقي وأولاده" class="hero-full-banner-img">
+      <img src="" alt="وكالة الفقي للدعاية والإعلان - تحت إشراف وإدارة: د/ محمد الفقي وأولاده"
+        class="hero-full-banner-img">
       <div class="hero-banner-hotspots">
-        <button type="button" class="hero-hotspot-btn btn-track-hotspot" onclick="openTrackOrderModal()" title="متابعة حالة طلب"></button>
+        <button type="button" class="hero-hotspot-btn btn-track-hotspot" onclick="openTrackOrderModal()"
+          title="متابعة حالة طلب"></button>
         <a href="#catalogSection" class="hero-hotspot-btn btn-catalog-hotspot" title="تصفح المنتجات والأسعار"></a>
       </div>
     </div>
@@ -85,17 +88,28 @@
 
   <nav class="categories-bar-section">
     <div class="categories-scroll-wrapper" id="categoryChips">
-      <button class="category-tab-btn active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> جميع الأقسام</button>
-      <button class="category-tab-btn" onclick="filterCategory('memorial-shields', this)"><i class="fa-solid fa-trophy"></i> دروع تذكارية</button>
-      <button class="category-tab-btn" onclick="filterCategory('flags', this)"><i class="fa-solid fa-flag"></i> الأعلام</button>
-      <button class="category-tab-btn" onclick="filterCategory('certificates', this)"><i class="fa-solid fa-certificate"></i> شهادات تقدير</button>
-      <button class="category-tab-btn" onclick="filterCategory('cutting', this)"><i class="fa-solid fa-scissors"></i> قص وتقطيع</button>
-      <button class="category-tab-btn" onclick="filterCategory('honor-shields', this)"><i class="fa-solid fa-award"></i> دروع تكريم</button>
-      <button class="category-tab-btn" onclick="filterCategory('uniforms', this)"><i class="fa-solid fa-shirt"></i> اليونيفورم</button>
-      <button class="category-tab-btn" onclick="filterCategory('mugs-gifts', this)"><i class="fa-solid fa-mug-hot"></i> المجات والهدايا</button>
-      <button class="category-tab-btn" onclick="filterCategory('cards-prints', this)"><i class="fa-solid fa-id-card"></i> كروت ومطبوعات</button>
-      <button class="category-tab-btn" onclick="filterCategory('logos-ads', this)"><i class="fa-solid fa-bullhorn"></i> لوجوهات وإعلانات</button>
-      <button class="category-tab-btn" onclick="filterCategory('serials-stamps', this)"><i class="fa-solid fa-stamp"></i> السريلات والأختام</button>
+      <button class="category-tab-btn active" onclick="filterCategory('all', this)"><i
+          class="fa-solid fa-border-all"></i> جميع الأقسام</button>
+      <button class="category-tab-btn" onclick="filterCategory('memorial-shields', this)"><i
+          class="fa-solid fa-trophy"></i> دروع تذكارية</button>
+      <button class="category-tab-btn" onclick="filterCategory('flags', this)"><i class="fa-solid fa-flag"></i>
+        الأعلام</button>
+      <button class="category-tab-btn" onclick="filterCategory('certificates', this)"><i
+          class="fa-solid fa-certificate"></i> شهادات تقدير</button>
+      <button class="category-tab-btn" onclick="filterCategory('cutting', this)"><i class="fa-solid fa-scissors"></i> قص
+        وتقطيع</button>
+      <button class="category-tab-btn" onclick="filterCategory('honor-shields', this)"><i class="fa-solid fa-award"></i>
+        دروع تكريم</button>
+      <button class="category-tab-btn" onclick="filterCategory('uniforms', this)"><i class="fa-solid fa-shirt"></i>
+        اليونيفورم</button>
+      <button class="category-tab-btn" onclick="filterCategory('mugs-gifts', this)"><i class="fa-solid fa-mug-hot"></i>
+        المجات والهدايا</button>
+      <button class="category-tab-btn" onclick="filterCategory('cards-prints', this)"><i
+          class="fa-solid fa-id-card"></i> كروت ومطبوعات</button>
+      <button class="category-tab-btn" onclick="filterCategory('logos-ads', this)"><i class="fa-solid fa-bullhorn"></i>
+        لوجوهات وإعلانات</button>
+      <button class="category-tab-btn" onclick="filterCategory('serials-stamps', this)"><i
+          class="fa-solid fa-stamp"></i> السريلات والأختام</button>
     </div>
   </nav>
 
@@ -211,7 +225,7 @@
       </div>
       <div class="modal-content-body">
         <form id="checkoutForm" onsubmit="handleFinalCheckout(event)">
-          
+
           <!-- Section 1: Customer Details -->
           <div class="checkout-subheading">
             <i class="fa-solid fa-user-pen"></i> 1. بيانات المستلم والتوصيل
@@ -254,8 +268,10 @@
           </p>
 
           <div class="payment-methods-grid">
-            <div class="payment-method-card active" id="payMethodVodaCard" onclick="selectPaymentMethod('vodafone_cash')">
-              <input type="radio" name="payMethodRadio" id="payRadioVoda" value="vodafone_cash" checked style="display: none;">
+            <div class="payment-method-card active" id="payMethodVodaCard"
+              onclick="selectPaymentMethod('vodafone_cash')">
+              <input type="radio" name="payMethodRadio" id="payRadioVoda" value="vodafone_cash" checked
+                style="display: none;">
               <div class="pay-card-header">
                 <i class="fa-solid fa-mobile-screen-button pay-card-icon voda"></i>
                 <div>
@@ -291,7 +307,8 @@
               </button>
             </div>
             <div class="pay-instruction-note">
-              حول إجمالي المبلغ (<strong id="checkoutTotalVoda">0 ج.م</strong>) لرقم الكاش أعلاه ثم ارفع سكرين شوت الإيصال بالأسفل.
+              حول إجمالي المبلغ (<strong id="checkoutTotalVoda">0 ج.م</strong>) لرقم الكاش أعلاه ثم ارفع سكرين شوت
+              الإيصال بالأسفل.
             </div>
           </div>
 
@@ -309,7 +326,8 @@
               أو رقم الهاتف للتحويل: <strong>01021800199</strong>
             </div>
             <div class="pay-instruction-note">
-              حول إجمالي المبلغ (<strong id="checkoutTotalInsta">0 ج.م</strong>) عبر انستاباي ثم ارفع سكرين شوت الإشعار بالأسفل.
+              حول إجمالي المبلغ (<strong id="checkoutTotalInsta">0 ج.م</strong>) عبر انستاباي ثم ارفع سكرين شوت الإشعار
+              بالأسفل.
             </div>
           </div>
 
@@ -319,28 +337,37 @@
               <i class="fa-solid fa-receipt" style="color: var(--primary-gold);"></i> إرفاق إيصال / سكرين شوت التحويل *
             </label>
             <div class="file-box-clean" onclick="document.getElementById('paymentReceiptInput').click()">
-              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.6rem; color: var(--primary-gold); margin-bottom: 0.3rem;"></i>
+              <i class="fa-solid fa-cloud-arrow-up"
+                style="font-size: 1.6rem; color: var(--primary-gold); margin-bottom: 0.3rem;"></i>
               <p style="font-size: 0.88rem; font-weight: 700;">اضغط هنا لرفع صورة إشعار أو سكرين شوت التحويل</p>
-              <span style="font-size: 0.75rem; color: var(--text-muted);">ضروري لمراجعة وتأكيد طلبكم فوراً من الورشة</span>
-              <input type="file" id="paymentReceiptInput" accept="image/*" style="display: none;" onchange="handleReceiptFileSelect(event)">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">ضروري لمراجعة وتأكيد طلبكم فوراً من
+                الورشة</span>
+              <input type="file" id="paymentReceiptInput" accept="image/*" style="display: none;"
+                onchange="handleReceiptFileSelect(event)">
             </div>
             <div id="receiptPreviewArea" style="display: none; margin-top: 0.75rem; position: relative;">
-              <img id="receiptPreviewImg" src="" style="max-width: 140px; max-height: 140px; border-radius: 8px; border: 2px solid var(--primary-gold);" alt="معاينة الإيصال">
-              <button type="button" onclick="clearReceiptFile()" style="position: absolute; top: -6px; right: -6px; background: var(--danger); color: #FFF; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;">
+              <img id="receiptPreviewImg" src=""
+                style="max-width: 140px; max-height: 140px; border-radius: 8px; border: 2px solid var(--primary-gold);"
+                alt="معاينة الإيصال">
+              <button type="button" onclick="clearReceiptFile()"
+                style="position: absolute; top: -6px; right: -6px; background: var(--danger); color: #FFF; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer;">
                 <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
           </div>
 
-          <div style="background: #F8FAFC; border: 1px solid var(--border-light); padding: 0.85rem; border-radius: 6px; margin-bottom: 1.25rem; margin-top: 1rem;">
+          <div
+            style="background: #F8FAFC; border: 1px solid var(--border-light); padding: 0.85rem; border-radius: 6px; margin-bottom: 1.25rem; margin-top: 1rem;">
             <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 0.25rem;">
               <span>إجمالي الحساب المطلوب تحويله:</span>
               <strong style="color: var(--primary-gold-dark); font-size: 1.2rem;" id="checkoutFinalTotal">0 ج.م</strong>
             </div>
-            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">فور إرسال الطلب سيصلك رقم تتبع مباشر وسيتم تجهيز طلبكم على الفور.</p>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">فور إرسال الطلب سيصلك رقم تتبع مباشر
+              وسيتم تجهيز طلبكم على الفور.</p>
           </div>
 
-          <button type="submit" id="checkoutSubmitBtn" class="btn btn-gold" style="width: 100%; font-size: 1rem; padding: 0.75rem;">
+          <button type="submit" id="checkoutSubmitBtn" class="btn btn-gold"
+            style="width: 100%; font-size: 1rem; padding: 0.75rem;">
             <i class="fa-solid fa-check-circle"></i> تأكيد وإرسال الطلب للوكالة
           </button>
         </form>
@@ -420,7 +447,8 @@
         <div id="calligrapherAuthSection" style="display: none;">
           <div
             style="background: #FFFBEB; border: 1px solid #FDE68A; padding: 0.75rem; border-radius: 6px; margin-bottom: 1.25rem; font-size: 0.82rem; color: #92400E;">
-            <i class="fa-solid fa-circle-info ml-1"></i> هذه البوابة مخصصة للمطابع، الشركات، والشركاء المعتمدين من إدارة وكالة
+            <i class="fa-solid fa-circle-info ml-1"></i> هذه البوابة مخصصة للمطابع، الشركات، والشركاء المعتمدين من إدارة
+            وكالة
             الفقي.
           </div>
 
@@ -492,7 +520,8 @@
   <footer class="clean-footer">
     <div class="footer-inner-clean">
       <div style="display: flex; align-items: center; gap: 1rem;">
-        <img src="image/logo.jpg" alt="شعار الفقي" style="width: 56px; height: 56px; object-fit: contain; padding: 2px; border-radius: 8px; border: 2px solid var(--primary-gold); background: #000;">
+        <img src="image/logo.jpg" alt="شعار الفقي"
+          style="width: 56px; height: 56px; object-fit: contain; padding: 2px; border-radius: 8px; border: 2px solid var(--primary-gold); background: #000;">
         <div>
           <div class="footer-brand-title">وكالة <span>الفقي</span> للدعاية والإعلان</div>
           <div class="footer-admin-name">تحت إشراف وإدارة: د/ محمد الفقي وأولاده</div>
@@ -509,4 +538,5 @@
 
   <script src="js/main.js"></script>
 </body>
+
 </html>
