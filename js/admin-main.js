@@ -516,7 +516,7 @@ window.printCurrentOrderReceipt = function() {
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #C59B27; padding-bottom: 15px; margin-bottom: 20px;">
         <div>
           <h2 style="margin: 0; color: #0F172A; font-size: 22px;">وكالة الفقي للدعاية والإعلان</h2>
-          <p style="margin: 3px 0 0; font-size: 12px; color: #666;">تحت إشراف وإدارة: د/ محمد الفقي وأولاده</p>
+          <p style="margin: 3px 0 0; font-size: 12px; color: #666;">تحت إشراف وإدارة: أبناء محمد الفقي</p>
           <p style="margin: 3px 0 0; font-size: 12px; color: #666;">هاتف وواتساب: 01021800199</p>
         </div>
         <div style="text-align: left;">
