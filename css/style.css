@@ -449,6 +449,204 @@ body {
   color: var(--navy-dark);
 }
 
+/* LUXURY CATEGORY CARDS GRID */
+.categories-grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.35rem;
+  margin-bottom: 2rem;
+}
+
+.category-block-card {
+  position: relative;
+  background: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 100%);
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 1.4rem;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-block-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #D4AF37, #C59B27, #0F172A);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.category-block-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--primary-gold);
+  box-shadow: 0 14px 30px -4px rgba(197, 155, 39, 0.22);
+}
+
+.category-block-card:hover::before {
+  opacity: 1;
+}
+
+.category-block-card:hover .cat-card-arrow {
+  background: linear-gradient(135deg, #D4AF37, #C59B27);
+  color: #0F172A;
+  transform: translateX(-4px);
+  box-shadow: 0 0 12px rgba(197, 155, 39, 0.4);
+}
+
+.category-block-card:hover .cat-icon-box {
+  transform: scale(1.05) rotate(-3deg);
+}
+
+.cat-badge-top {
+  position: absolute;
+  top: 1.15rem;
+  left: 1.15rem;
+  background: rgba(197, 155, 39, 0.12);
+  color: #92400E;
+  border: 1px solid rgba(197, 155, 39, 0.3);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.cat-icon-box {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  border: 2px solid var(--primary-gold);
+  color: #FDE68A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.95rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.cat-card-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0F172A;
+  margin-bottom: 0.35rem;
+}
+
+.cat-card-desc {
+  font-size: 0.82rem;
+  color: #64748B;
+  line-height: 1.5;
+  margin-bottom: 1.15rem;
+  flex: 1;
+}
+
+.cat-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F1F5F9;
+}
+
+.cat-count-pill {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #A17C17;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cat-card-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0F172A;
+  color: #FDE68A;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.25s ease;
+}
+
+/* ACTIVE CATEGORY VIEW HEADER */
+.category-view-header {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  border: 2px solid var(--primary-gold);
+  border-radius: 14px;
+  padding: 1.15rem 1.35rem;
+  margin-bottom: 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.15);
+}
+
+.cat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.cat-header-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid var(--primary-gold);
+  color: #FDE68A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+}
+
+.cat-header-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #FDE68A;
+  margin-bottom: 0.2rem;
+}
+
+.cat-header-sub {
+  font-size: 0.8rem;
+  color: #94A3B8;
+}
+
+.btn-back-categories {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 0.55rem 1.15rem;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.25s ease;
+}
+
+.btn-back-categories:hover {
+  background: linear-gradient(135deg, #D4AF37 0%, #C59B27 100%);
+  color: #0F172A;
+  border-color: #D4AF37;
+  transform: translateX(4px);
+  box-shadow: 0 4px 15px rgba(197, 155, 39, 0.35);
+}
+
 .products-grid-layout {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
