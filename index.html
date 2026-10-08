@@ -113,12 +113,23 @@
   </nav>
 
   <main class="products-catalog-section" id="catalogSection">
-    <div class="section-head">
-      <h2>أصناف ومنتجات الوكالة</h2>
-      <span class="text-sm text-muted">اختر الصنف واطلب التخصيص أو الطباعة مباشرة</span>
+    <!-- CATEGORIES OVERVIEW GRID (SHOWN BY DEFAULT) -->
+    <div id="categoriesOverviewSection">
+      <div class="section-head">
+        <div>
+          <h2><i class="fa-solid fa-layer-group" style="color: var(--primary-gold); margin-left: 0.5rem;"></i> أقسام
+            منتجات وخدمات الوكالة</h2>
+          <span class="text-sm text-muted">اختر القسم المطلوب للاطلاع على الأصناف والطلب والتخصيص المباشر</span>
+        </div>
+      </div>
+      <div class="categories-grid-cards" id="categoriesGrid"></div>
     </div>
 
-    <div class="products-grid-layout" id="productsGrid"></div>
+    <!-- ACTIVE CATEGORY PRODUCTS VIEW (SHOWN WHEN A CATEGORY OR SEARCH IS SELECTED) -->
+    <div id="categoryProductsSection" style="display: none;">
+      <div class="category-view-header" id="categoryViewHeader"></div>
+      <div class="products-grid-layout" id="productsGrid"></div>
+    </div>
   </main>
 
   <div class="modal-overlay" id="customizationModal">
