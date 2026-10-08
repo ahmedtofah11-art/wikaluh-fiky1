@@ -17,17 +17,17 @@ const db = firebase.firestore();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 const DEFAULT_CATEGORIES = [
-  { id: "all", name: "جميع الأقسام", icon: "fa-border-all" },
-  { id: "memorial-shields", name: "دروع تذكارية", icon: "fa-trophy" },
-  { id: "flags", name: "الأعلام", icon: "fa-flag" },
-  { id: "certificates", name: "شهادات تقدير", icon: "fa-certificate" },
-  { id: "cutting", name: "قص وتقطيع", icon: "fa-scissors" },
-  { id: "honor-shields", name: "دروع تكريم", icon: "fa-award" },
-  { id: "uniforms", name: "اليونيفورم", icon: "fa-shirt" },
-  { id: "mugs-gifts", name: "المجات والهدايا", icon: "fa-mug-hot" },
-  { id: "cards-prints", name: "كروت ومطبوعات", icon: "fa-id-card" },
-  { id: "logos-ads", name: "لوجوهات وإعلانات", icon: "fa-bullhorn" },
-  { id: "serials-stamps", name: "السريلات والأختام", icon: "fa-stamp" }
+  { id: "all", name: "جميع الأقسام", icon: "fa-border-all", desc: "استعراض كافة أقسام ومنتجات الوكالة" },
+  { id: "memorial-shields", name: "دروع تذكارية", icon: "fa-trophy", desc: "دروع كريستال وخشبية تذكارية محفورة بالليزر بجودة ملكية", badge: "فخامة كريستال" },
+  { id: "flags", name: "الأعلام", icon: "fa-flag", desc: "أعلام شركات ومؤسسات قماش ستان دبل فيس مع سارية وشراشيب", badge: "ستان ملكي" },
+  { id: "certificates", name: "شهادات تقدير", icon: "fa-certificate", desc: "شهادات شكر وتقدير وتخرج بأغلفة جلدية مذهبة وإطارات أنيقة", badge: "بصمة مذهبة" },
+  { id: "cutting", name: "قص وتقطيع", icon: "fa-scissors", desc: "تفريغ وقص ليزر وراوتر CNC للأكريليك والخشب والمعادن", badge: "دقة ليزر CNC" },
+  { id: "honor-shields", name: "دروع تكريم", icon: "fa-award", desc: "دروع نحاسية فاخرة مطلية بالذهب وصناديق قطيفة للمناسبات", badge: "مطلي ذهب" },
+  { id: "uniforms", name: "اليونيفورم", icon: "fa-shirt", desc: "يونيفورم وتيشرتات قطن 100% مع طباعة DTF وتطريز حراري", badge: "قطن 100%" },
+  { id: "mugs-gifts", name: "المجات والهدايا", icon: "fa-mug-hot", desc: "مجات سحرية، هدايا دعائية وميداليات بطباعة سبلميشن فاخرة", badge: "طباعة سبلميشن" },
+  { id: "cards-prints", name: "كروت ومطبوعات", icon: "fa-id-card", desc: "بيزنس كارد فاخر سلوفان، بروشورات، وفلايرات ومطبوعات ورقية", badge: "سلوفان فاخر" },
+  { id: "logos-ads", name: "لوجوهات وإعلانات", icon: "fa-bullhorn", desc: "بنرات خارجية فليكس، رول اب ستاند، لوحات إعلانية ومضيئة", badge: "مقاوم للعوامل" },
+  { id: "serials-stamps", name: "السريلات والأختام", icon: "fa-stamp", desc: "أختام أوتوماتيك فلاش ليزر وسريلات مرقمة عالية الدقة والنقاء", badge: "فلاش ليزر سريع" }
 ];
 
 const INITIAL_PRODUCTS = [
@@ -1041,14 +1041,122 @@ window.searchTrackOrder = async function(directNumber = null) {
 window.filterCategory = function(catId, btn) {
   activeCategory = catId;
   document.querySelectorAll(".category-tab-btn").forEach(b => b.classList.remove("active"));
-  if (btn) btn.classList.add("active");
-  renderProductsList();
+  
+  if (btn) {
+    btn.classList.add("active");
+  } else {
+    const targetBtn = Array.from(document.querySelectorAll(".category-tab-btn")).find(b => 
+      b.getAttribute("onclick") && b.getAttribute("onclick").includes(`'${catId}'`)
+    );
+    if (targetBtn) targetBtn.classList.add("active");
+  }
+
+  const overviewSec = document.getElementById("categoriesOverviewSection");
+  const productsSec = document.getElementById("categoryProductsSection");
+  const headerSec = document.getElementById("categoryViewHeader");
+
+  if (catId === "all" && !searchFilter) {
+    if (overviewSec) overviewSec.style.display = "block";
+    if (productsSec) productsSec.style.display = "none";
+    renderCategoryCards();
+  } else {
+    if (overviewSec) overviewSec.style.display = "none";
+    if (productsSec) productsSec.style.display = "block";
+
+    const currentCatObj = categories.find(c => c.id === catId);
+    const catName = currentCatObj ? currentCatObj.name : (catId === "all" ? "جميع الأصناف" : "القسم المحدد");
+    const catIcon = currentCatObj ? currentCatObj.icon : "fa-layer-group";
+    const catDesc = currentCatObj ? (currentCatObj.desc || "") : "استعراض نتائج التصفية والبحث";
+
+    if (headerSec) {
+      headerSec.innerHTML = `
+        <div class="cat-header-info">
+          <div class="cat-header-icon">
+            <i class="fa-solid ${catIcon || 'fa-box'}"></i>
+          </div>
+          <div>
+            <h2 class="cat-header-title">${catName}</h2>
+            <div class="cat-header-sub">${catDesc}</div>
+          </div>
+        </div>
+        <button class="btn-back-categories" onclick="filterCategory('all')">
+          <i class="fa-solid fa-arrow-right"></i> العودة لكافة الأقسام
+        </button>
+      `;
+    }
+
+    renderProductsList();
+
+    const catSection = document.getElementById("catalogSection");
+    if (catSection && !btn) {
+      catSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 };
 
 window.handleSearchInput = function(query) {
   searchFilter = query.trim().toLowerCase();
-  renderProductsList();
+  const overviewSec = document.getElementById("categoriesOverviewSection");
+  const productsSec = document.getElementById("categoryProductsSection");
+  const headerSec = document.getElementById("categoryViewHeader");
+
+  if (searchFilter) {
+    if (overviewSec) overviewSec.style.display = "none";
+    if (productsSec) productsSec.style.display = "block";
+    if (headerSec) {
+      headerSec.innerHTML = `
+        <div class="cat-header-info">
+          <div class="cat-header-icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <div>
+            <h2 class="cat-header-title">نتائج البحث عن: "${query}"</h2>
+            <div class="cat-header-sub">جاري عرض جميع المنتجات المطابقة لكلمة البحث في كافة الأقسام</div>
+          </div>
+        </div>
+        <button class="btn-back-categories" onclick="document.getElementById('searchInput').value=''; handleSearchInput(''); filterCategory('all')">
+          <i class="fa-solid fa-arrow-right"></i> مسح البحث والعودة للأقسام
+        </button>
+      `;
+    }
+    renderProductsList();
+  } else {
+    if (activeCategory === "all") {
+      if (overviewSec) overviewSec.style.display = "block";
+      if (productsSec) productsSec.style.display = "none";
+      renderCategoryCards();
+    } else {
+      filterCategory(activeCategory);
+    }
+  }
 };
+
+function renderCategoryCards() {
+  const container = document.getElementById("categoriesGrid");
+  if (!container) return;
+
+  const validCats = categories.filter(c => c.id !== "all");
+
+  container.innerHTML = validCats.map(cat => {
+    const count = products.filter(p => p.category === cat.id).length;
+    return `
+      <div class="category-block-card" onclick="filterCategory('${cat.id}')">
+        ${cat.badge ? `<span class="cat-badge-top">${cat.badge}</span>` : ""}
+        <div class="cat-icon-box">
+          <i class="fa-solid ${cat.icon || 'fa-box'}"></i>
+        </div>
+        <h3 class="cat-card-title">${cat.name}</h3>
+        <p class="cat-card-desc">${cat.desc || ("استكشف أحدث منتجات وتصاميم قسم " + cat.name)}</p>
+        <div class="cat-card-footer">
+          <span class="cat-count-pill"><i class="fa-solid fa-box-archive"></i> ${count} أصناف متوفرة</span>
+          <div class="cat-card-arrow">
+            <i class="fa-solid fa-arrow-left"></i>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
 
 function renderProductsList() {
   const container = document.getElementById("productsGrid");
@@ -1120,7 +1228,6 @@ async function loadCategoriesFromFirestore() {
     const hasOldCategories = !snap.empty && snap.docs.some(d => ["banners", "tshirts", "shields"].includes(d.id));
     
     if (snap.empty || hasOldCategories) {
-      // Clean obsolete categories and save new 10 categories
       if (hasOldCategories) {
         const batch = db.batch();
         snap.docs.forEach(d => batch.delete(d.ref));
@@ -1151,6 +1258,8 @@ function renderCategoryChips() {
       <i class="fa-solid ${c.icon || 'fa-box'}"></i> ${c.name}
     </button>
   `).join("");
+
+  renderCategoryCards();
 }
 
 function loadProductsFromFirestore() {
@@ -1164,10 +1273,12 @@ function loadProductsFromFirestore() {
       }
       products = [...INITIAL_PRODUCTS];
     }
+    renderCategoryCards();
     renderProductsList();
   }, (err) => {
     console.warn(err);
     products = [...INITIAL_PRODUCTS];
+    renderCategoryCards();
     renderProductsList();
   });
 }
