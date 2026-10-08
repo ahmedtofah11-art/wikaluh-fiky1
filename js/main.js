@@ -1251,13 +1251,13 @@ async function loadCategoriesFromFirestore() {
 
 function renderCategoryChips() {
   const wrapper = document.getElementById("categoryChips");
-  if (!wrapper) return;
-
-  wrapper.innerHTML = categories.map(c => `
-    <button class="category-tab-btn ${c.id === activeCategory ? 'active' : ''}" onclick="filterCategory('${c.id}', this)">
-      <i class="fa-solid ${c.icon || 'fa-box'}"></i> ${c.name}
-    </button>
-  `).join("");
+  if (wrapper) {
+    wrapper.innerHTML = categories.map(c => `
+      <button class="category-tab-btn ${c.id === activeCategory ? 'active' : ''}" onclick="filterCategory('${c.id}', this)">
+        <i class="fa-solid ${c.icon || 'fa-box'}"></i> ${c.name}
+      </button>
+    `).join("");
+  }
 
   renderCategoryCards();
 }
